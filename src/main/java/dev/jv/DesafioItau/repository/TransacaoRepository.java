@@ -8,33 +8,44 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 @Repository
 public class TransacaoRepository {
 
     List<TransacaoDTO> dataList = new ArrayList<>();
 
-    public void salvarData(TransacaoDTO data){
+    public void salvarData(TransacaoDTO data) {
         dataList.add(data);
     }
 
-    public void limparDados () {
+    public void limparDados() {
 
     }
 
-    public void deletarDados(){
+    public void deletarDados() {
         dataList.clear();
     }
 
-    public EstatiscasDTO estatisticas(OffsetDateTime horaAtual){
-        // Terminar os metodos de calcular estatisticas
-        DoubleSummaryStatistics operacoes = new DoubleSummaryStatistics();
-//        Long count = dataList.stream().count();
-//        double avg =  dataList.stream(). /count;
-//        double min = dataList.stream().min();
-       EstatiscasDTO dados = new EstatiscasDTO(23L, 23,23,23,23);
+    public EstatiscasDTO estatisticas(OffsetDateTime horaAtual) {
 
-       return dados;
+        if (dataList.isEmpty()) {
+            return new EstatiscasDTO(0L, 0.0, 0.0, 0.0, 0.0);
+        }
+
+
+        final var summary = dataList.stream()
+                .filter(t -> t.getDataHora().isAfter(horaAtual) || t.getDataHora().isEqual(horaAtual))
+                .mapToDouble(t -> t.getValor().doubleValue())
+                .summaryStatistics();
+
+
+
+        EstatiscasDTO aborgue = new EstatiscasDTO(summary.getCount(), summary.getAverage(), summary.getMax(), summary.getMin(), summary.getSum());
+
+        System.out.println(aborgue);
+
+        return aborgue;
 
     }
 

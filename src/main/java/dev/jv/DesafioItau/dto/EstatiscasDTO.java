@@ -1,9 +1,10 @@
 package dev.jv.DesafioItau.dto;
 
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class EstatiscasDTO {
     private final Long count;
     private final double avg;
