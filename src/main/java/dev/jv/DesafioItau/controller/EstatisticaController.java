@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
 
-// Controller de estatistica
 @Slf4j
 @RestController
 @RequestMapping("/estatistica")
@@ -29,15 +28,21 @@ public class EstatisticaController {
     }
 
     @GetMapping
-    public ResponseEntity<EstatiscasDTO> calcularOperacoes(){
-        final var horaAtual = OffsetDateTime.now().minusSeconds(estatisticaProperties.segundos());
+    public ResponseEntity<EstatiscasDTO> calcularOperacoes() {
+        try {
+            final var horaAtual = OffsetDateTime.now().minusSeconds(estatisticaProperties.segundos());
+            EstatiscasDTO dados = transacaoRepository.estatisticas(horaAtual);
 
-        // criar mensagens de logs tanto aqui quanto no outro controller
-        //log.info();
-        EstatiscasDTO dados = transacaoRepository.estatisticas(horaAtual);
+            if (dados.getCount() == 0){
+                log.error("Não há transação nos últimos 60 segundos");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
 
-        System.out.println("esses sao os dados: "+dados);
-
-        return ResponseEntity.status(HttpStatus.OK).body(dados);
+            log.info("Calculando estatistícas das transações nos últimos:"+ horaAtual.getSecond());
+            return ResponseEntity.status(HttpStatus.OK).body(dados);
+        } catch (Exception e) {
+            log.error("Erro ao calcular estatísticas.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

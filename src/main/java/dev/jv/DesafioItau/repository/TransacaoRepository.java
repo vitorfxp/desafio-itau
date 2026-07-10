@@ -39,13 +39,7 @@ public class TransacaoRepository {
                 .mapToDouble(t -> t.getValor().doubleValue())
                 .summaryStatistics();
 
-
-
-        EstatiscasDTO aborgue = new EstatiscasDTO(summary.getCount(), summary.getAverage(), summary.getMax(), summary.getMin(), summary.getSum());
-
-        System.out.println(aborgue);
-
-        return aborgue;
+        return new EstatiscasDTO(summary.getCount(), summary.getAverage(), summary.getMax(), summary.getMin(), summary.getSum());
 
     }
 
