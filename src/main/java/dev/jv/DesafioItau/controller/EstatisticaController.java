@@ -1,10 +1,10 @@
 package dev.jv.DesafioItau.controller;
 
 
+import dev.jv.DesafioItau.docs.EstatiscaControllerDoc;
 import dev.jv.DesafioItau.configuration.EstatisticaProperties;
 import dev.jv.DesafioItau.dto.EstatiscasDTO;
 import dev.jv.DesafioItau.repository.TransacaoRepository;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,7 @@ import java.time.OffsetDateTime;
 @Slf4j
 @RestController
 @RequestMapping("/estatistica")
-@Tag(
-        name = "Estatística",
-        description = "EndPoints responsáveis por realizar as operações com as transações, sendo elas contar,média, minímo e maxímo."
-)
-public class EstatisticaController {
+public class EstatisticaController implements EstatiscaControllerDoc {
 
     private final EstatisticaProperties estatisticaProperties;
     private final TransacaoRepository transacaoRepository;
