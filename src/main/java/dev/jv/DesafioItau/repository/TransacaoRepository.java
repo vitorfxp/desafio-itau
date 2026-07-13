@@ -19,10 +19,6 @@ public class TransacaoRepository {
         dataList.add(data);
     }
 
-    public void limparDados() {
-
-    }
-
     public void deletarDados() {
         dataList.clear();
     }
